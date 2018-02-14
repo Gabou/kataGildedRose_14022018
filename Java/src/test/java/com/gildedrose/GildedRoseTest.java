@@ -4,14 +4,29 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 public class GildedRoseTest {
 
     @Test
-    public void foo() {
-        Item[] items = new Item[] { new Item("foo", 0, 0) };
-        GildedRose app = new GildedRose(items);
-        app.updateQuality();
-        assertEquals("fixme", app.items[0].name);
+    public void rename() {
+        PrintStream oldOut = System.out;
+        try {
+            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+            PrintStream out = new PrintStream(byteArray);
+            System.setOut(out);
+            TexttestFixture.main(null);
+            Files.write(Paths.get("result.txt"), byteArray.toByteArray(), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            System.setOut(oldOut);
+        }
     }
 
 }
